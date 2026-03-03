@@ -1,0 +1,120 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+%\ifcvprfinal\pagestyle{empty}\fi
+\setcounter{page}{4321}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{\LaTeX\ Author Guidelines for CVPR Proceedings}
+
+\author{First Author\\
+Institution1\\
+Institution1 address\\
+{\tt\small firstauthor@i1.org}
+% For a paper whose authors are all at the same institution,
+% omit the following lines up until the closing ``}''.
+% Additional authors and addresses can be added with ``\and'',
+% just like the second author.
+% To save space, use either the email address or home page, not both
+\and
+Second Author\\
+Institution2\\
+First line of institution2 address\\
+{\tt\small secondauthor@i2.org}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+   The ABSTRACT is to be in fully-justified italicized text, at the top
+   of the left-hand column, below the author and affiliation
+   information. Use the word ``Abstract'' as the title, in 12-point
+   Times, boldface type, centered relative to the column, initially
+   capitalized. The abstract is to be in 10-point, single-spaced type.
+   Leave two blank lines after the Abstract, then begin the main text.
+   Look at previous CVPR abstracts to get a feel for style and length.
+\end{abstract}
+
+\section{Introduction}
+The introduction should include the research motivation, objectives, and your main contributions.
+\begin{itemize}
+    \item Introduce the importance of this topic in the field of deep learning.
+    \item Briefly describe the current challenges.
+    \item Summarize the main work of this paper, for example: ``We evaluated ...'' or ``We implemented ...''.
+\end{itemize}
+
+\section{Background}
+Provide the background knowledge needed to understand this study.
+\begin{itemize}
+    \item Relevant theoretical foundations (e.g., Transformer architectures and the biological significance of TSS prediction).
+    \item Problem definition: define the specific mathematical or engineering problem you aim to solve.
+\end{itemize}
+
+\section{Related Works}
+Review prior work related to your topic.
+\begin{itemize}
+    \item Cite seminal papers (e.g., GenoRetriever \cite{AuthorsYear}).
+    \item Explain how your work differs from or improves upon existing studies.
+\end{itemize}
+
+\section{Technical Approach}
+This is the core section of the report. Describe your implementation details thoroughly.
+\begin{itemize}
+    \item Neural network architecture (you may use diagrams).
+    \item Loss functions and optimizer settings.
+    $$L = \frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2$$
+    \item Data preprocessing steps.
+\end{itemize}
+
+\section{Experiments}
+\subsection{Experimental Design}
+Describe the dataset, hardware environment (e.g., GPU model, QEMU emulator), and evaluation metrics (Accuracy, F1-score, etc.).
+
+\subsection{Results and Discussion}
+Present your results.
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+Method & Accuracy \\
+\hline\hline
+Baseline & 85\% \\
+Our Method & 92\% \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Performance comparison of different methods.}
+\end{table}
+
+\section{Conclusion and Future Work}
+Summarize your research findings, and discuss the current limitations as well as possible future improvements.
+
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{egbib}
+}
+
+\end{document}
