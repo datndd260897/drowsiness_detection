@@ -1,3 +1,24 @@
-\begin{thebibliography}{}\itemsep=-1pt
+\begin{thebibliography}{1}\itemsep=-1pt
+
+\bibitem{Hassan2025}
+O.~F. Hassan, A.~F. Ibrahim, and B.~Hafiz.
+\newblock Real-time driver drowsiness detection using transformer architectures: a novel deep learning approach.
+\newblock {\em Scientific Reports}, 15(17493), May 2025.
+
+\bibitem{patla2025drowsy}
+R.~Patla.
+\newblock Over 600 drowsy driving crashes were reported in 2025; the state patrol shares the warning signs.
+\newblock \url{https://www.kkco11news.com/2025/11/03/over-600-drowsy-driving-crashes-were-reported-2025-state-patrol-shares-warning-signs/}, November 3 2025.
+\newblock Accessed: 2026-03-04.
+
+\bibitem{tefft2024drowsy}
+B.~C. Tefft.
+\newblock Drowsy driving in fatal crashes, united states, 2017–2021.
+\newblock Research brief, AAA Foundation for Traffic Safety, Washington, D.C., March 2024.
+
+\bibitem{AAA2024TSCI}
+X.~Zhang and R.~Steinbach.
+\newblock 2024 traffic safety culture index.
+\newblock Technical report, AAA Foundation for Traffic Safety, Washington, D.C., 2025.
 
 \end{thebibliography}

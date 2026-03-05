@@ -25,11 +25,10 @@
 \begin{document}
 
 %%%%%%%%% TITLE
-\title{\LaTeX\ Author Guidelines for CVPR Proceedings}
+\title{\LaTeX\ Drowsiness Detection Project Report}
 
-\author{First Author\\
-Institution1\\
-Institution1 address\\
+\author{Dinh Duc Dat Nguyen \\
+Oregon state University \\
 {\tt\small firstauthor@i1.org}
 % For a paper whose authors are all at the same institution,
 % omit the following lines up until the closing ``}''.
@@ -37,10 +36,9 @@ Institution1 address\\
 % just like the second author.
 % To save space, use either the email address or home page, not both
 \and
-Second Author\\
-Institution2\\
-First line of institution2 address\\
-{\tt\small secondauthor@i2.org}
+Feng-Shih Cheng \\
+Oregon state University \\
+{\tt\small karaburi2023@gmail.com}
 }
 
 \maketitle
@@ -64,6 +62,29 @@ The introduction should include the research motivation, objectives, and your ma
     \item Briefly describe the current challenges.
     \item Summarize the main work of this paper, for example: ``We evaluated ...'' or ``We implemented ...''.
 \end{itemize}
+
+Between 2017 and 2021, 17.6\% of all ftal crashes involved drowsy driving~\cite{tefft2024drowsy}. 
+This issue keeps continuing today; As of Novermber 2025, the Colorado Sate Patrol reported 627 related incidents~\cite{patla2025drowsy}, 
+and A 2024 survey indicate that 25 \% of drivers admitted to having engaged in drowsy driving within the past 30 days~\cite{AAA2024TSCI}.
+
+In order to successfully prevent traffic accidents, detecting drowsiness is a fundamental and valuable requirement. 
+Therefore, we were looking to develop a program capable of predicting when a driver may become drowsy and immediately notifying them to avoid serious accidents on the road. 
+To achieve this goal, we need to track the driver's eye-opening and eye-closing patterns to determine whether the driver is in a drowsy-driving state. 
+To address this problem, we applied deep learning methods, which will be explained in the following chapters.
+
+Inspired by Hassan et al.~\cite{Hassan2025}, this project adopts a simpler approach to develop an effective eye-state classification system (open vs.\ closed) based on a deep learning model trained on the MRL dataset, while applying the best-performing model to provide real-time eye-state feedback.
+The proposed method consists of a series of steps starting with \dots
+
+% answer following bullet points question and convert them into a paragraph form
+\begin{itemize}
+    \item Data preparation
+    \item Do we change the the size of the image? normalization? data augmentation?
+    \item What is our Model?
+    \item After training and evaluating? how we pick the best model? (accuracy, precision, recall and F1-score)
+\end{itemize}
+
+% Replace this for real structure of the paper.
+The rest of the paper is structured as follows: In “Literature review” section, present a critical appraisal of related works. In “Proposed methodology” section, we discuss the methodology proposed. “Experiments and results” section presents the experimental results. “Comparative study” section presents the comprehensive study. In “Discussion” section, the discussion is presented. “Conclusion and future directions” section: concludes this paper.
 
 \section{Background}
 Provide the background knowledge needed to understand this study.
@@ -114,7 +135,7 @@ Summarize your research findings, and discuss the current limitations as well as
 
 {\small
 \bibliographystyle{ieee}
-\bibliography{egbib}
+\bibliography{dp_final}
 }
 
 \end{document}
