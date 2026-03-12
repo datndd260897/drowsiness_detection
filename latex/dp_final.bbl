@@ -1,15 +1,39 @@
 \begin{thebibliography}{1}\itemsep=-1pt
 
+\bibitem{abd2023efficient}
+S.~Abd El-Nabi, E.-S.~M. El-Rabaie, K.~F. Ramadan, and A.~Emam.
+\newblock An efficient approach of drowsiness detection based on resnet50 and xception architectures.
+\newblock In {\em 2023 3rd International Conference on Electronic Engineering (ICEEM)}, pages 1--6. IEEE, 2023.
+
+\bibitem{8808931}
+W.~Deng and R.~Wu.
+\newblock Real-time driver-drowsiness detection system using facial features.
+\newblock {\em IEEE Access}, 7:118727--118738, 2019.
+
 \bibitem{Hassan2025}
 O.~F. Hassan, A.~F. Ibrahim, and B.~Hafiz.
 \newblock Real-time driver drowsiness detection using transformer architectures: a novel deep learning approach.
 \newblock {\em Scientific Reports}, 15(17493), May 2025.
+
+\bibitem{jabbar2020driver}
+R.~Jabbar, M.~Shinoy, M.~Kharbeche, K.~Al-Khalifa, M.~Krichen, and K.~Barkaoui.
+\newblock Driver drowsiness detection model using convolutional neural networks techniques for android application, 2020.
+
+\bibitem{kiashari2020evaluation}
+S.~E.~H. Kiashari, A.~Nahvi, H.~Bakhoda, A.~Homayounfard, and M.~Tashakori.
+\newblock Evaluation of driver drowsiness using respiration analysis by thermal imaging on a driving simulator.
+\newblock {\em Multimedia Tools and Applications}, 79(25):17793--17815, 2020.
 
 \bibitem{patla2025drowsy}
 R.~Patla.
 \newblock Over 600 drowsy driving crashes were reported in 2025; the state patrol shares the warning signs.
 \newblock \url{https://www.kkco11news.com/2025/11/03/over-600-drowsy-driving-crashes-were-reported-2025-state-patrol-shares-warning-signs/}, November 3 2025.
 \newblock Accessed: 2026-03-04.
+
+\bibitem{Tefft2016}
+B.~C. Tefft.
+\newblock Acute sleep deprivation and risk of motor vehicle crash involvement.
+\newblock Technical report, AAA Foundation for Traffic Safety, Washington, D.C., Dec. 2016.
 
 \bibitem{tefft2024drowsy}
 B.~C. Tefft.

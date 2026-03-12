@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{ulem}
 
 % Include other packages here, before hyperref.
 
@@ -19,16 +20,13 @@
 \def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
 \def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
 
-% Pages are numbered in submission mode, and unnumbered in camera-ready
-%\ifcvprfinal\pagestyle{empty}\fi
-\setcounter{page}{4321}
 \begin{document}
 
 %%%%%%%%% TITLE
 \title{\LaTeX\ Drowsiness Detection Project Report}
 
 \author{Dinh Duc Dat Nguyen \\
-Oregon state University \\
+Oregon State University \\
 {\tt\small firstauthor@i1.org}
 % For a paper whose authors are all at the same institution,
 % omit the following lines up until the closing ``}''.
@@ -37,7 +35,7 @@ Oregon state University \\
 % To save space, use either the email address or home page, not both
 \and
 Feng-Shih Cheng \\
-Oregon state University \\
+Oregon State University \\
 {\tt\small karaburi2023@gmail.com}
 }
 
@@ -63,11 +61,22 @@ The introduction should include the research motivation, objectives, and your ma
     \item Summarize the main work of this paper, for example: ``We evaluated ...'' or ``We implemented ...''.
 \end{itemize}
 
+At the pace of modern society continues to accelerate, fatigue due to insufficient sleep of drivers has become one of critical road-safety issues. 
+According to data reported by the AAA Foundation for Traffic Safety~\cite{Tefft2016}, crash risk increases greatly as sleep duration decreases. For example, drivers who sleep 6 to 7 hours exhibit a 1.3-fold increase in crash risk relative to fully rested drivers, 
+rising to 1.9-fold with only 5-6 hours of sleep.
+
 Between 2017 and 2021, 17.6\% of all ftal crashes involved drowsy driving~\cite{tefft2024drowsy}. 
 This issue keeps continuing today; As of Novermber 2025, the Colorado Sate Patrol reported 627 related incidents~\cite{patla2025drowsy}, 
 and A 2024 survey indicate that 25 \% of drivers admitted to having engaged in drowsy driving within the past 30 days~\cite{AAA2024TSCI}.
 
+Though car manufacturers such as Tesla and Mercedes-Benz have brought in advanced driver-assistance systems (ADAS) into their vehicles~\cite{abd2023efficient,jabbar2020driver},
+accurately assessing a driver's real-time physiological and cognitive state through non-invasive methods remains a significant and unresolved challenge at the field of modern automotive safety.
+
 In order to successfully prevent traffic accidents, detecting drowsiness is a fundamental and valuable requirement. 
+
+%TODO: ADD few related work intro here
+傳統的疲勞偵測多仰賴 PERCLOS 等啟發式指標，然而這些方法在複雜光影或個體差異下表現
+
 Therefore, we were looking to develop a program capable of predicting when a driver may become drowsy and immediately notifying them to avoid serious accidents on the road. 
 To achieve this goal, we need to track the driver's eye-opening and eye-closing patterns to determine whether the driver is in a drowsy-driving state. 
 To address this problem, we applied deep learning methods, which will be explained in the following chapters.
@@ -94,24 +103,68 @@ Provide the background knowledge needed to understand this study.
 \end{itemize}
 
 \section{Related Works}
-Review prior work related to your topic.
+
+Several studies have developed real-time eye state recognition systems designed for resouce-constrained embedded devices. 
+
+For example, DriCare represents a great advancement in fatigue detection using video-based facial analysis~\cite{8808931}. To overcome the tracking inaccuracies that previous algorithms suffered from, 
+the authors introduced a new method, which enables more robust face tracking. The core of DriCare's improvement lies in detecting 68 major facial characteristics to define facial regions. 
+By analyzing temporal cues like yawning frequency, blinking rate and the the duration of eye closure, the system can effectively identify signs of fatigue. 
+Experimental results demonstrate that DriCare achieves a high accuracy of approximately 92\%.
+
+To mitigate limitations of visible-light cameras under fluctuating light and vision, an study has introduced faical thermal imaging and infrared-based illuminators ~\cite{kiashari2020evaluation}. 
+These approaches evaluate drowsiness by extracting metrics such as Percentage of Eye Closure (PERCLOS), Eye Closing Duration (ECD) and Average Mouth Opening Time (AOT), along with physiological features like inspiratory-to-Expiratory ratio. 
+By using fuzzy logic framework and SVM classifiers, the appraoch categorizes fatigue into three levels with up to 91\% accuracy.
+
+More recently, a study using Transformer-based architectures has pushed accuracy even higher, reaching 99.15\% on the MRL Eye Dataset using a Vision Transformer (ViT)~\cite{Hassan2025}. 
+That research also evaluated other models like the Swin Transformer and used Class Activation Mapping (CAM) to show which parts of the eye the model focuses on. 
+% TO double check!
+Rather than adopting their Transformer-based architecture, our implementation uses a lighter technical stack. 
+At the same time, our method shares the same objective and methodological approach: inferring driver fatigue from eye-state dynamics, including preprocessing steps such as normalization and an explicit focus on robustness in evaluation. 
+This design choice makes the system more practical for real-world deployment on resource-constrained in-vehicle platforms.
+
 \begin{itemize}
-    \item Cite seminal papers (e.g., GenoRetriever \cite{AuthorsYear}).
     \item Explain how your work differs from or improves upon existing studies.
 \end{itemize}
 
 \section{Technical Approach}
-This is the core section of the report. Describe your implementation details thoroughly.
+In this project, we implement a lightweight convolutional neural network (CNN) specifically optimized for binary eye-state classification. The architecture consists of three convolutional layers designed to extract spatial features from eye images effectively.
+
+\textbf{Neural Network Architecture.} 
+The proposed model, \textit{EyeClassifier}, follows a sequential structure:
 \begin{itemize}
-    \item Neural network architecture (you may use diagrams).
-    \item Loss functions and optimizer settings.
-    $$L = \frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2$$
-    \item Data preprocessing steps.
+    \item \textbf{Feature Extraction:} Three convolutional layers with 32, 64, and 128 filters ($3 \times 3$ kernel), each followed by a ReLU activation and a $2 \times 2$ Max-Pooling layer to reduce spatial dimensions.
+    \item \textbf{Classification Head:} A fully connected layer with 128 neurons, followed by a Dropout layer ($p=0.5$) to prevent overfitting, and a final output neuron with a Sigmoid activation function to predict the probability of the eye being open.
 \end{itemize}
+
+\textbf{Loss Function and Optimizer.} 
+Since the task is a binary classification, we employ the Binary Cross Entropy (BCE) loss:
+\begin{equation}
+L = -\frac{1}{N} \sum_{i=1}^N [y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)]
+\end{equation}
+where $y_i$ is the ground truth and $\hat{y}_i$ is the predicted probability. We use the Adam optimizer for its efficient gradient descent properties.
 
 \section{Experiments}
 \subsection{Experimental Design}
-Describe the dataset, hardware environment (e.g., GPU model, QEMU emulator), and evaluation metrics (Accuracy, F1-score, etc.).
+
+The experiments are conducted using the MRL Eye Dataset~\cite{}, which is a large-scale collection of eye images specifically designed for drowsiness detection. 
+The dataset contains 84,898 images captured under various conditions, including different lighting environments, gender distributions and the presence of eyeglasses. 
+Each image in the dataset follows a specific naming convention, from which we extract the eye-state label (0 for closed, 1 for open) as the ground truth for our binary classification task.
+
+\textbf{Dataset.} 
+We utilize the MRL Eye Dataset, which contains 84,898 grayscale images. For our experiments, all images are resized to $24 \times 24$ pixels and normalized to the range $[-1, 1]$. We ensure a robust evaluation by splitting the data into training and testing sets.
+
+\textbf{Experimental Setup.} 
+The model is implemented in Python using the PyTorch library. Training is conducted on a macOS environment utilizing the Metal Performance Shaders (MPS) for hardware acceleration. The training process is configured with the following hyperparameters:
+\begin{itemize}
+    \item \textbf{Batch Size:} 64 samples per iteration.
+    \item \textbf{Epochs:} 5 iterations over the entire dataset.
+    \item \textbf{Learning Rate:} 0.001.
+\end{itemize}
+
+\textbf{Evaluation Metrics.} 
+To quantitatively assess the model, we use Accuracy, Precision, Recall, and the F1-score. These metrics allow us to evaluate not only the overall performance but also the reliability of the system in detecting critical ``eye-closed'' states that indicate driver drowsiness.
+
+
 
 \subsection{Results and Discussion}
 Present your results.
