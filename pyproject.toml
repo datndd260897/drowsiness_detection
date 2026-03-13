@@ -1,7 +1,19 @@
 [project]
 name = "drowsiness-detection"
 version = "0.1.0"
-description = "Add your description here"
+description = "Real-time drowsiness detection using OpenCV and a PyTorch eye-state classifier"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "numpy>=2.2.6",
+    "opencv-python>=4.13.0.92",
+    "pygame>=2.6.1",
+    "torch>=2.10.0",
+]
+
+[dependency-groups]
+train = [
+    "kagglehub>=1.0.0",
+    "pillow>=12.1.1",
+    "torchvision>=0.25.0",
+]
