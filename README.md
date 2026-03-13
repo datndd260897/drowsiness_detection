@@ -11,7 +11,19 @@
 
 ## Usage
 
+### Inference
 
+```bash
+uv sync
+uv run python main.py
+```
+
+### Train
+
+```bash
+uv sync --group train
+uv run python train.py
+```
 
 ## References
 
