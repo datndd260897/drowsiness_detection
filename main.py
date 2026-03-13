@@ -50,7 +50,7 @@ def main():
         sound = None
 
     # Load Haar Cascades using OpenCV's built-in paths (No local folder needed)
-    cascade_path = cv2.data.haarcascades
+    cascade_path = "haar_cascade_files"
     leye_cascade = cv2.CascadeClassifier(os.path.join(cascade_path, 'haarcascade_lefteye_2splits.xml'))
     reye_cascade = cv2.CascadeClassifier(os.path.join(cascade_path, 'haarcascade_righteye_2splits.xml'))
 
