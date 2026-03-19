@@ -78,10 +78,10 @@ def main():
     
     model = EyeClassifier().to(device)
     try:
-        model.load_state_dict(torch.load('models/best_model_2.pth', map_location=device, weights_only=True))
-        print("Successfully loaded 'models/best_model_2.pth'")
+        model.load_state_dict(torch.load('models/best_model_3.pth', map_location=device, weights_only=True))
+        print("Successfully loaded 'models/best_model_3.pth'")
     except FileNotFoundError:
-        print("Error: 'models/best_model_2.pth' not found. Please run the training script first.")
+        print("Error: 'models/best_model_3.pth' not found. Please run the training script first.")
         return
 
     model.eval()  # Set model to evaluation mode
