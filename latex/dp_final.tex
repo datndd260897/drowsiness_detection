@@ -54,90 +54,95 @@ Oregon State University \\
 
 %%%%%%%%% ABSTRACT
 \begin{abstract}
-   The ABSTRACT is to be in fully-justified italicized text, at the top
-   of the left-hand column, below the author and affiliation
-   information. Use the word ``Abstract'' as the title, in 12-point
-   Times, boldface type, centered relative to the column, initially
-   capitalized. The abstract is to be in 10-point, single-spaced type.
-   Leave two blank lines after the Abstract, then begin the main text.
-   Look at previous CVPR abstracts to get a feel for style and length.
+Driver fatigue is a leading cause of traffic accidents everywhere. This project develops a real-time drowsiness detection system using a lightweight convolutional neural network (CNN) for binary eye-state classification (open vs.\ closed). To ensure efficiency for resource-constrained environments, the system utilizes Haar Cascade classifiers for eye localization and a temporal scoring mechanism to distinguish normal blinks from prolonged eye closure. 
+The model, trained on the Yawn-Eye and MRL Eye datasets, achieved a validation accuracy of 98.14\%, with a sensitivity of 97.92\% for closed-eye detection and a specificity of 98.36\% for open-eye recognition. 
+While experimental results show strong predictive performance, live testing revealed that the current localization method is sensitive to complex backgrounds and lighting changes. These findings suggest that while the lightweight CNN approach is effective for classification, practical deployment requires more robust tracking and broader testing across diverse driving conditions.
 \end{abstract}
 
 \section{Introduction}
 
-As the pace of modern society continues to accelerate, driver fatigue caused by insufficient sleep has become one of critical road-safety issues. 
-In the United States, the AAA Foundation for Traffic Safety reported in 2016 that crash risk increases greatly as sleep duration decreases. For example, drivers who sleep 5 to 6 hours exhibit a 1.9-fold increase in crash risk relative to fully rested drivers, 
-rising to 4.3-fold for those who sleep only 4 to 5 hours~\cite{Tefft2016}.
+As the pace of modern society continues to accelerate, driver fatigue caused by insufficient sleep has become one of the critical road-safety issues. 
+In the United States, the AAA Foundation for Traffic Safety reported in 2016 that crash risk increases greatly as sleep duration decreases. For example, drivers who sleep 5 to 6 hours have 1.9 times higher crash risk relative to fully rested drivers, 
+rising to 4.3 times higher for those who sleep only 4 to 5 hours~\cite{Tefft2016}.
 
 In the United States, 17.6\% of fatal crashes between 2017 and 2021 involved drowsy driving~\cite{tefft2024drowsy}. 
-This issue remains ongoing. In Colorado, the Colorado State Patrol reported 627 drowsy-driving-related incidents as of November 2025~\cite{patla2025drowsy}, 
-and in the United States, a 2024 survey found that 25\% of drivers admitted to having engaged in drowsy driving within the previous 30 days~\cite{AAA2024TSCI}.
+This issue remains ongoing, and a 2024 survey found that 25\% of drivers admitted to having engaged in drowsy driving within the previous 30 days~\cite{AAA2024TSCI}.
+Additionally, in Colorado, the Colorado State Patrol reported 627 drowsy-driving-related incidents as of November 2025~\cite{patla2025drowsy}.
 
-Though car manufacturers such as Tesla and Mercedes-Benz have brought in advanced driver-assistance systems (ADAS) into their vehicles~\cite{abd2023efficient,jabbar2020driver},
+Though car manufacturers such as Tesla and Mercedes-Benz have incorporated advanced driver-assistance systems (ADAS) into their vehicles~\cite{abd2023efficient,jabbar2020driver},
 accurately assessing a driver's real-time physiological and cognitive state through non-invasive methods remains a significant and unresolved challenge in the field of modern automotive safety.
 
 In order to successfully prevent traffic accidents, detecting drowsiness is a fundamental and valuable requirement. 
-Traditional drowsiness-detection methods often rely on handcrafted indicators such as the Percentage of Eye Closure (PERCLOS)~\cite{dinges1998perclos}. These approaches typically combine manually designed features with threshold-based decision rules. However, 
-their performance can degrade under complex lighting conditions and because eye appearance varies significantly from person to person. 
+Traditional drowsiness-detection methods often rely on handcrafted indicators such as the Percentage of Eye Closure (PERCLOS)~\cite{dinges1998perclos}. 
+These approaches typically combine manually designed features with threshold-based decision rules. 
+However, their performance can degrade under complex lighting conditions, as eye appearance varies significantly from person to person. 
 To address this issue, we develop a deep learning eye-state classification model that tracks eye-opening and eye-closing patterns to detect drowsiness in real time. 
 
-Inspired by Hassan et al.~\cite{Hassan2025}, this project adopts a simpler approach to develop a simplified deep learning eye-state classification model for binary classification (open vs.\ closed), trained on the Yawn-Eye Dataset~\cite{raju_2020}, and deploys the best-performing model for real-time eye-state monitoring.
+Inspired by Hassan et al.~\cite{Hassan2025}, this project adopts a simpler approach to develop a simplified deep learning eye-state classification model for binary classification (open vs.\ closed), trained on the Yawn-Eye Dataset~\cite{raju_2020} and the MRL Eye Dataset, and deploys the best-performing model for real-time eye-state monitoring.
 Eye regions are localized in real time using pre-trained OpenCV Haar Cascade classifiers~\cite{opencv_haarcascades}, avoiding the computational overhead of facial landmark estimation.
-The proposed method consists of data preparation, image normalization and augmentation, CNN model design, and rigorous evaluation using standard classification metrics to select the best-performing model.
+The proposed method consists of data preparation, image normalization and augmentation, CNN model design and training, and evaluation using standard classification metrics to identify the best-performing model.
+Experimental results show that the method reaches a validation accuracy of 98.14\%, indicating strong predictive performance.
 
 The rest of the paper is structured as follows: In ``Background'' section, we introduce the background knowledge needed for this study. 
 In ``Related Works'' section, we review prior studies on driver drowsiness detection. 
 In ``Technical Approach'' section, we describe the proposed methodology, including the network architecture and training strategy. 
 In ``Experiments'' section, we present the experimental setup, evaluation metrics, and results. 
-In ``Conclusion and Future Work'' section, we summarize the findings and discuss possible directions for future improvements.
+In ``Conclusion and Future Work'' section, we summarize the findings and discuss possible directions for future improvement.
 
 \section{Background}
-This study is grounded in computer vision-based binary image classification, where each eye image is assigned one of two classes: \textit{open} or \textit{closed}. In practical drowsiness monitoring, prolonged eye closure is a strong behavioral indicator of fatigue and is commonly quantified by metrics such as PERCLOS~\cite{dinges1998perclos}. Instead of estimating many handcrafted geometric features, modern deep learning methods learn discriminative visual patterns directly from raw images.
+This study focuses on binary eye-state classification using computer vision, where each eye image is assigned one of two classes: \textit{open} or \textit{closed}. 
+In practical drowsiness monitoring, prolonged eye closure is a strong behavioral indicator of fatigue and is commonly quantified by metrics such as PERCLOS~\cite{dinges1998perclos}. 
+Instead of manually defining eye-related shape features, the model learns useful visual patterns directly from raw images.
 
-Convolutional Neural Networks (CNNs) are particularly suitable for this task because local convolution kernels capture eyelid edges, iris visibility, and shading cues at different spatial scales. Pooling operations improve translational robustness, while Batch Normalization and ReLU help stable and efficient optimization. For resource-constrained deployment, lightweight CNNs are often preferred over larger architectures because they provide a favorable trade-off between accuracy and latency.
+Convolutional Neural Networks (CNNs) are particularly suitable for this task because local convolution kernels capture eye features at different spatial scales. 
+Pooling operations improve tolerance to small shifts, while Batch Normalization and ReLU help stable and efficient optimization. 
+For real-time use on limited hardware, lightweight CNNs are usually preferred because they balance accuracy and computing resource.
 
-Formally, given a preprocessed eye image $x \in \mathbb{R}^{1 \times 24 \times 24}$, the model predicts class probabilities
+To achieve real-time localization before classification, Haar Cascade classifiers~\cite{opencv_haarcascades}, provide a computationally efficient solution. These classifiers use simple Haar-like features and a cascade of boosted decision trees to rapidly filter out non-eye regions, enabling low-latency operation on live video streams.
+
+Formally, given a preprocessed eye image $x \in \mathbb{R}^{1 \times 24 \times 24}$ localized by the cascade classifier, the model predicts class probabilities
 \begin{equation}
-\hat{p}(y \mid x) = f_{\theta}(x), \quad y \in \{0,1\},
+\hat{p}(y \mid x) = f_{\theta}(x), \quad y \in \{0,1\}.
 \end{equation}
-where $y=0$ denotes \textit{closed} and $y=1$ denotes \textit{open}. The training objective is to find parameters $\theta$ that minimize cross-entropy loss over the dataset:
+where $y=0$ denotes \textit{closed eye} and $y=1$ denotes \textit{open eye}. The training objective is to find parameters $\theta$ that minimize cross-entropy loss over the dataset:
 \begin{equation}
 \min_{\theta}\; \frac{1}{N}\sum_{n=1}^{N} \mathcal{L}_{CE}(y_n, f_{\theta}(x_n)).
 \end{equation}
+where $N$ is the number of training samples, $y_n$ is the ground-truth label of sample $n$, and $\mathcal{L}_{CE}$ denotes the cross-entropy loss.
 
-At system level, the engineering problem extends beyond per-frame classification to robust temporal decision making. Single-frame errors can occur due to blink motion, occlusion, or illumination changes. Therefore, this project combines frame-level predictions with a temporal score mechanism that accumulates consecutive closed-eye detections and triggers an alarm only when sustained closure is observed. This design directly targets real-time driver monitoring, where reducing false alarms while preserving sensitivity is critical.
+In practice, a single frame can be misclassified because of blinking, the eye being partly blocked, or changes in lighting. To reduce these errors, the system uses a temporal score that accumulates consecutive closed-eye detections. This helps filter out normal blinks and triggers an alarm only when the eyes stay closed for a longer period.
 
 \section{Related Works}
 
 Several studies have developed real-time eye state recognition systems designed for resource-constrained embedded devices. 
 
 For example, DriCare represents a great advancement in fatigue detection using video-based facial analysis~\cite{8808931}. To overcome the tracking inaccuracies that previous algorithms suffered from, 
-the authors introduced a new method, which enables more robust face tracking. The core of DriCare's improvement lies in detecting 68 major facial characteristics to define facial regions. 
-By analyzing temporal cues like yawning frequency, blinking rate and the the duration of eye closure, the system can effectively identify signs of fatigue. 
+the authors introduced a new method, which enables more reliable face tracking. The core of DriCare's improvement lies in detecting 68 major facial characteristics to define facial regions. 
+By analyzing temporal cues like yawning frequency, blinking rate and the duration of eye closure, the system can effectively identify signs of fatigue. 
 Experimental results demonstrate that DriCare achieves a high accuracy of approximately 92\%.
 
 To mitigate limitations of visible-light cameras under fluctuating light and vision, a study has introduced facial thermal imaging and infrared-based illuminators ~\cite{kiashari2020evaluation}. 
 These approaches evaluate drowsiness by extracting metrics such as Percentage of Eye Closure (PERCLOS), Eye Closing Duration (ECD) and Average Mouth Opening Time (AOT), along with physiological features like inspiratory-to-Expiratory ratio. 
 By using a fuzzy logic framework and SVM classifiers, the approach categorizes fatigue into three levels with up to 91\% accuracy.
 
-More recently, a study using Transformer-based architectures has pushed accuracy even higher, reaching 99.15\% on the MRL Eye Dataset using a Vision Transformer (ViT)~\cite{Hassan2025}. 
-That research also evaluated other models like the Swin Transformer and used Class Activation Mapping (CAM) to show which parts of the eye the model focuses on. 
-Unlike recent transformer-based approaches, our method adopts a lightweight CNN to prioritize real-time performance on resource-constrained in-vehicle platforms. 
-Although both approaches aim to infer driver fatigue from eye-state, our design reduces computing overhead while keeping practical deployment possibility.
+More recently, deep learning has made a lot progress in eye-state classification. Transformer-based architectures, for instance, have pushed accuracy extremely high, reaching 99.15\% on the MRL Eye Dataset using a Vision Transformer (ViT)~\cite{Hassan2025}. 
+Other researchers have also successfully used heavy convolutional networks like ResNet50 and Xception~\cite{abd2023efficient}. 
+However, deploying these massive models in real-world automotive environments might be challenging because they require more memory and computational power, which increases deployment cost on cameras and mobile devices. 
+Several studies have thus focused on real-time eye state recognition systems specifically designed for resource-constrained embedded devices such as Android~\cite{jabbar2020driver}. Inspired by this line of work, our project uses a lighter technical stack instead of heavy Transformer models. We follow this direction to keep the system practical for resource-constrained in vehicle environment.
 
 \section{Technical Approach}
 
-In this project, we implement a lightweight convolutional neural network (CNN) specifically optimized for binary eye-state classification. 
+In this project, we implement a lightweight CNN specifically optimized for binary eye-state classification. 
 The architecture consists of three convolutional layers designed to extract spatial features from eye images effectively.
 
 \subsection{Neural Network Architecture}
 
-The proposed model is a custom Convolutional Neural Network (CNN) designed from scratch to prioritize low-latency, real-time inference. The network accepts input images with a resolution of $1 \times 24 \times 24$ pixels and processes them through three sequential convolutional layers with 32, 64, and 128 filters, respectively. 
+The proposed model is designed from scratch to prioritize low-latency, real-time inference. The network accepts input images with a resolution of $1 \times 24 \times 24$ pixels and processes them through three sequential convolutional layers with 32, 64, and 128 filters, respectively. 
 These layers are specifically designed to extract high-level spatial features, such as the curvature of the eyelid and the geometric shape of the pupil. To ensure stable learning and faster convergence, each convolutional layer is followed by a Batch Normalization layer. 
 Nonlinearity is introduced through the Rectified Linear Unit (ReLU) activation function, which enables the model to capture complex visual patterns. Additionally, Max Pooling layers are applied after each convolution to reduce the spatial dimensions of the feature maps, focusing the network on the most important visual information.
 
 Following the feature extraction stage, the resulting multi-dimensional data is flattened into a feature vector consisting of 1152 units. 
-This vector is then passed into a fully connected layer with 128 neurons. To mitigate the risk of overfitting and improve the model's generalization capabilities, a Dropout layer with a rate of 50\% is implemented, which randomly deactivates half of the neurons during the training phase. 
+This vector is then passed into a fully connected layer with 128 neurons. To mitigate the risk of overfitting and improve the model's generalization capabilities, a dropout layer with a rate of 50\% is implemented, which randomly deactivates half of the neurons during the training phase. 
 The final output layer consists of two neurons, representing the "Closed" (0) and "Open" (1) eye states, respectively. 
 This architecture ensures a quick and efficient classification process suitable for embedded systems.
 
@@ -145,7 +150,7 @@ This architecture ensures a quick and efficient classification process suitable 
 
 Cross-Entropy was chosen instead of other functions like Mean Squared Error (MSE) because it is better for binary classification tasks. 
 Unlike MSE, which can lead to vanishing gradients when predicted values are far from the target, 
-Cross-Entropy contains a logarithmic scale that provides a significantly larger penalty for "confident but incorrect" predictions. 
+Cross-Entropy contains a logarithmic scale that provides a significantly larger penalty for ``confident but incorrect'' predictions. 
 This ensures better weight updates and faster convergence during the early stages of training.
 
 \begin{equation}
@@ -154,82 +159,122 @@ L = -\sum_{i=1}^{C=2} y_i \log(\hat{y}_i)
 
 where $C$ denotes the total number of classes (which is 2 in this binary task), $y_i$ is the ground truth indicator (0 or 1) for class $i$, and $\hat{y}_i$ is the predicted probability for class $i$. 
 
-The Adam optimizer is utilized with an initial learning rate of 0.001 for its adaptive learning rate capabilities. Furthermore, to ensure the model converges effectively and avoids local minima, a \texttt{ReduceLROnPlateau} learning rate scheduler is implemented. 
+The Adam optimizer is utilized with an initial learning rate of 0.001 for its adaptive learning rate capabilities. Furthermore, to ensure the model converges effectively and avoids local minima, a learning-rate scheduler is implemented. 
 This scheduler monitors the validation loss and reduces the learning rate by a factor of 0.5 if no improvement is observed for two consecutive epochs, allowing for improved weight adjustments in the later stages of training.
 
 \section{Experiments}
-
-\subsection{Experimental Setup}
-
-In this project, a lightweight Convolutional Neural Network (CNN) model, is implemented in Python using the PyTorch framework.
-The training was conducted on Google Colab, utilizing CUDA for hardware acceleration. The real-time inference pipeline is built on top of pre-trained OpenCV Haar Cascade classifiers and operates directly on a live webcam stream. Instead of facial landmark detection, eye regions are localized using pre-trained Haar Cascade classifiers~\cite{opencv_haarcascades}. 
-Each detected eye region is cropped, converted to grayscale, resized to \textbf{24 $\times$ 24} pixels, normalized, and then passed to the trained model for inference. 
-To improve robustness in streaming conditions, the system uses a score-based temporal smoothing mechanism: the score increases by one for each consecutive frame in which both eyes are predicted as closed and decreases by one otherwise, with the score clipped at zero. When the score exceeds a threshold of 15, the system triggers an auditory alarm through the \texttt{PyGame} mixer library, overlays a pulsing red border on the video frame as a visual warning, and stores a screenshot (\texttt{image.jpg}) as evidence of the detected drowsiness event. 
+This section describes the experimental process, including the training pipeline and the real-time inference setup. We also explain the metrics used to evaluate the model and the specific hyperparameters chosen for training. Finally, we present the classification results on the validation set and discuss the findings from live tests.
 
 \subsection{Training Phase}
-The images used for training are sourced from the \textbf{Yawn-Eye Dataset} provided through Kaggle~\cite{raju_2020}. This dataset contains eye images collected under varied conditions, including different lighting environments and gender distributions. For this project, the dataset is filtered for binary classification (Open vs. Closed) and partitioned using an \textbf{80\%-20\% train-validation split}, where the training set is used for weight optimization and the validation set serves to monitor generalization performance.
 
-To ensure the model's robustness against varying environmental factors, a comprehensive data preparation and augmentation pipeline was implemented. All eye images were first converted to single-channel \textbf{grayscale} and resized to a fixed resolution of \textbf{24 $\times$ 24 pixels}. During the training cycle, data augmentation techniques were applied, including the use of \texttt{ColorJitter} to randomly adjust brightness, contrast, saturation, and hue. Additionally, geometric transformations such as random horizontal flipping and rotations of up to \textbf{15 degrees} were employed to account for natural head tilting. Finally, pixel values were normalized to facilitate more efficient learning and stable gradient descent.
+The model is trained in Python using the PyTorch framework, and training was conducted on Google Colab with CUDA for hardware acceleration. The images used for training and validation are collected from two public datasets: the Yawn-Eye Dataset~\cite{raju_2020} and the MRL Eye Dataset~\cite{shingha_2023}. 
+The combined dataset is partitioned using an 80\%-20\% train-validation split, resulting in 13,759 images used for training and weight optimization, while the remaining samples serve as the validation set to monitor generalization performance.
 
-\subsection{Performance Evaluation Methods}
-The model performance is evaluated using metrics including Accuracy, Precision, Recall, and F1-score on the validation set. Furthermore, the system is evaluated qualitatively through real-time testing to verify the effectiveness of the temporal smoothing and alarm mechanism under live conditions. 
-
-\begin{equation}
-Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
-\end{equation}
-
-\subsection{Hyperparameters}
-The selection of hyperparameters was based on empirical testing to achieve reliable convergence. A \textbf{batch size of 64} was utilized for training. The \textbf{Adam optimizer} was used with a fixed \textbf{learning rate of 0.001} to enable rapid and self-adaptive convergence. The model was trained for a total of \textbf{20 epochs}, using a \texttt{ReduceLROnPlateau} scheduler to adjust the learning rate if the validation loss stagnated. Furthermore, a \textbf{Cross-Entropy Loss} function was employed to minimize the classification error. 
-
-\subsection{Experimental Results}
-The evaluation results demonstrate the high efficiency and accuracy of the proposed lightweight CNN. After 20 epochs of training, the model achieved a training accuracy of \textbf{99.39\%} and a validation accuracy of \textbf{99.60\%}. The final validation loss was minimized to \textbf{0.0175}, indicating that the model successfully learned the structural differences between open and closed eye states while maintaining excellent generalization on unseen data.
-
-The detailed classification report on the validation subset (247 samples) confirms near-perfect performance across both categories. As shown in Table 1, the model achieved a precision of \textbf{1.00} for the "Closed" state and a recall of \textbf{1.00} for the "Open" state. These metrics indicate that the architecture is exceptionally reliable at identifying eyes in an open state (zero false negatives) while minimizing errors in detecting closure.
+To better handle varying environmental conditions, all eye images were converted to single-channel grayscale and resized to a fixed resolution of 24 $\times$ 24 pixels. During training, augmentation was applied by randomly adjusting brightness, contrast, saturation, and hue, along with random horizontal flipping and rotations of up to 15 degrees to account for natural head tilting. 
+Finally, pixel values were normalized to make training more stable. Examples of the resulting preprocessed and augmented eye images are shown in Figure~\ref{fig:eye_augmentation}.
 
 \begin{figure}[h]
-\begin{center}
-\includegraphics[width=1.0\linewidth]{../results/loss_acc.png}
-\end{center}
-   \caption{Training and validation loss and accuracy history over 20 epochs.}
+\centering
+\includegraphics[width=0.95\linewidth]{images/eye_augmentation.png}
+\caption{Examples of eye images after preprocessing and augmentation in the training pipeline.}
+\label{fig:eye_augmentation}
+\end{figure}
+
+\subsection{Inference Phase}
+The real-time inference pipeline was tested locally on a Mac and operates directly on a live webcam stream. Eye regions are localized using pre-trained OpenCV Haar Cascade classifiers~\cite{opencv_haarcascades} instead of facial landmark detection. 
+Each detected eye region is cropped, converted to grayscale, resized to 24 $\times$ 24 pixels, and rescaled before being passed to the trained model for inference. Figure~\ref{fig:face_screenshot} illustrates the system in operation, showing the localized eye regions and the accumulated drowsiness score in the lower-left corner.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\linewidth]{images/face_screenshot.png}
+\caption{Real-time drowsiness detection interface showing localized eye regions and the accumulated temporal score.}
+\label{fig:face_screenshot}
+\end{figure}
+
+To improve reliability in streaming conditions, the system uses a score-based filtering mechanism: it maintains a running score that increases when the driver's eyes are closed and decreases when they are open. When the score hits 15, the system sounds an alarm to alert the driver.
+
+\subsection{Performance Evaluation Methods}
+In order to have a fair assessment, model performance is evaluated on a balanced validation set consisting of 1,732 closed-eye and 1,708 open-eye samples. This balanced distribution ensures that accuracy provides a reliable and unbiased measure of the model's prediction. 
+The evaluation metrics, accuracy, precision, sensitivity, and specificity, are defined as follows:
+
+\begin{equation}
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation}
+
+\begin{equation}
+\text{Precision} = \frac{TP}{TP + FP}
+\end{equation}
+
+\begin{equation}
+\text{Sensitivity} = \frac{TP}{TP + FN}
+\end{equation}
+
+\begin{equation}
+\text{Specificity} = \frac{TN}{TN + FP}
+\end{equation}
+
+Furthermore, the system is qualitatively assessed through real-time testing to verify the effectiveness of the score-based filtering and alarm mechanism under live conditions.
+
+\subsection{Hyperparameters}
+
+The selection of hyperparameters was based on empirical testing to achieve reliable convergence. A batch size of 64 was utilized for training. The Adam optimizer was used with a fixed learning rate of 0.001 to enable rapid and self-adaptive convergence. The model was trained for a total of 20 epochs, using a dynamic learning rate reduction strategy to adjust the step size if the validation loss stagnated. Furthermore, a Cross-Entropy Loss function was implemented to minimize the classification error. 
+
+\subsection{Experimental Results}
+
+After 20 epochs of training, the model achieved strong predictive performance, reaching a validation accuracy of 98.14\%. This result indicates that the model successfully learned the structural differences between open and closed eye states while maintaining good generalization on unseen data.
+
+As shown in the following analysis, the model achieved a precision of 98.38\% and a Sensitivity of 97.92\% for the "Closed" state, along with a Specificity of 98.36\% for the "Open" state. These metrics indicate that the architecture is quite reliable at detecting drowsiness events while maintaining high accuracy in identifying normal eye states.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\linewidth]{images/loss_acc.png}
+\caption{Training and validation loss and accuracy history over 20 epochs.}
 \label{fig:loss_acc}
 \end{figure}
 
-Figure~\ref{fig:loss_acc} shows that both training and validation loss decrease rapidly in early epochs and then stabilize at low values, while both accuracy curves increase and converge near 1.0. The small gap between training and validation curves indicates that the model generalizes well on unseen samples and does not exhibit clear overfitting under the current setting.
+Figure~\ref{fig:loss_acc} shows that both training and validation loss decrease rapidly in early epochs and then stabilize at low values, while both accuracy curves increase and converge near 99\%. 
+The model seem to generalize well on unseen samples and does not have clear overfitting under the current setting.
 
 \begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.8\linewidth]{../results/confusion_matrix.png}
-\end{center}
-   \caption{Confusion matrix of the model on the validation set.}
+\centering
+\includegraphics[width=0.8\linewidth]{images/confusion_matrix.png}
+\caption{Confusion matrix of the model on the validation set.}
 \label{fig:confusion_matrix}
 \end{figure}
 
-Figure~\ref{fig:confusion_matrix} is strongly concentrated on the diagonal entries, meaning that most open-eye and closed-eye samples are correctly classified. The very limited off-diagonal values indicate few false positives and false negatives, which is consistent with the high precision, recall, and F1-score reported in Table 1.
+Figure~\ref{fig:confusion_matrix} is strongly concentrated on the diagonal entries, meaning that most open-eye and closed-eye samples are correctly classified; the very limited off-diagonal values indicate few false positives and false negatives.
 
-During live testing, the system exhibited high responsiveness with minimal inference latency. The integration of the 15-frame temporal smoothing threshold was found to be effective in filtering out natural blinks, ensuring that the auditory and visual alarms were only triggered during sustained eye closure events associated with drowsiness. This qualitative result validates that the lightweight design is sufficient for practical, real-world driver monitoring tasks.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{images/sens_spec.png}
+\caption{Safety-critical performance metrics: Sensitivity, Specificity, and Balanced Accuracy.}
+\label{fig:sens_spec}
+\end{figure}
+
+To further evaluate the model's behavior in safety-critical scenarios, we focus on three key metrics. Of all actual eye-closure events, the system successfully detects 97.92\% (Sensitivity); of all actual open-eye moments, the system correctly identifies 98.36\% (Specificity); and when the system triggers an eye-closure detection, it is accurate in 98.38\% of cases (Precision). Figure~\ref{fig:sens_spec} visualizes these metrics along with the Balanced Accuracy. 
+
+As summarized in Table 1, these results demonstrate that the model can be capable in both high detection rates for drowsiness and low false-alarm rates during normal driving.
 
 \begin{table}[h]
-\begin{center}
-\begin{tabular}{|l|c|c|c|}
+\centering
+\begin{tabular}{|l|c|}
 \hline
-Class & Precision & Recall & F1-score \\
+Metric & Value \\
 \hline\hline
-Closed (0) & 1.00 & 0.99 & 1.00 \\
-Open (1) & 0.99 & 1.00 & 1.00 \\
-\hline
-\textbf{Overall Accuracy} & \multicolumn{3}{c|}{\textbf{99.60\%}} \\
+Precision (Closed Eye Detection) & 98.38\% \\
+Sensitivity (Closed Eye Detection) & 97.92\% \\
+Specificity (Open Eye Recognition) & 98.36\% \\
+Balanced Accuracy & 98.14\% \\
 \hline
 \end{tabular}
-\end{center}
-\caption{Model performance metrics on the validation set.}
+\caption{Safety-critical evaluation metrics on the validation set.}
 \end{table}
 
+During live testing, the 15-frame smoothing threshold successfully separated normal blinks from prolonged eye closure. However, the system is not yet ready for actual road conditions. The Haar Cascade-based tracking often loses the target when the background is busy or when other people are in the frame. We also noted that the overall speed and stability under different lighting need more work. These tests show that while the prototype confirms the basic approach, it will need more stable tracking and more extensive testing before it can be used in real-world driving.
+
 \section{Conclusion and Future Work}
-This project developed a lightweight CNN-based drowsiness detection pipeline that performs binary eye-state classification and real-time warning based on temporal smoothing. Experimental results show strong predictive performance (99.60\% validation accuracy) and reliable real-time behavior, where the score-based threshold effectively suppresses short blink-induced false alarms while preserving detection of sustained eye closure.
-
-Despite these promising results, several limitations remain. First, the model is trained and validated on a curated eye-image dataset, which may not fully represent real driving conditions such as nighttime glare, eyeglasses reflections, motion blur, and large pose variation. Second, Haar Cascade eye localization is efficient but can become unstable under severe head rotation or partial occlusion. Third, the current decision logic focuses mainly on eye closure and does not jointly model other fatigue-related cues such as yawning dynamics, head nodding, or gaze drift.
-
-Future work will focus on improving robustness and deployment readiness. A first direction is to expand training data with more in-vehicle scenarios and domain adaptation strategies. A second direction is to replace or complement Haar Cascades with more robust face/eye detectors while maintaining low latency. A third direction is to extend the temporal model from heuristic scoring to sequence learning methods (e.g., lightweight RNN/TCN) for richer fatigue dynamics. Finally, model compression and edge optimization (quantization/pruning) can be explored to improve inference efficiency on embedded automotive hardware.
+This project built a lightweight CNN-based pipeline for drowsiness detection. The system accurately classifies eye states and uses temporal smoothing to reduce false alarms. While the results are encouraging, with a 98.14\% validation accuracy, there are clear gaps in the current implementation. The eye-tracking method is sensitive to complex backgrounds and extra faces in the frame. Future work will involve testing the system in actual vehicles and replacing the simple detectors with more reliable alternatives that can handle low light and various head positions. Another key area is to expand the system to include yawn detection, as it provides another important indicator of fatigue. 
+Finally, we plan to include more diverse training data, specifically eyes with glasses, as the current model's performance with glasses is still unknown.
 
 {\small
 \bibliographystyle{ieee}
