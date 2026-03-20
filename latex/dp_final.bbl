@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}\itemsep=-1pt
+\begin{thebibliography}{10}\itemsep=-1pt
 
 \bibitem{abd2023efficient}
 S.~Abd El-Nabi, E.-S.~M. El-Rabaie, K.~F. Ramadan, and A.~Emam.
@@ -9,6 +9,11 @@ S.~Abd El-Nabi, E.-S.~M. El-Rabaie, K.~F. Ramadan, and A.~Emam.
 W.~Deng and R.~Wu.
 \newblock Real-time driver-drowsiness detection system using facial features.
 \newblock {\em IEEE Access}, 7:118727--118738, 2019.
+
+\bibitem{dinges1998perclos}
+D.~F. Dinges and R.~Grace.
+\newblock {PERCLOS}: A valid psychophysiological measure of alertness as assessed by psychomotor vigilance.
+\newblock Technical Report FHWA-MCRT-98-006, United States. Federal Motor Carrier Safety Administration. Technology Division, Oct. 1998.
 
 \bibitem{Hassan2025}
 O.~F. Hassan, A.~F. Ibrahim, and B.~Hafiz.
@@ -24,11 +29,23 @@ S.~E.~H. Kiashari, A.~Nahvi, H.~Bakhoda, A.~Homayounfard, and M.~Tashakori.
 \newblock Evaluation of driver drowsiness using respiration analysis by thermal imaging on a driving simulator.
 \newblock {\em Multimedia Tools and Applications}, 79(25):17793--17815, 2020.
 
+\bibitem{opencv_haarcascades}
+{OpenCV Team}.
+\newblock Opencv haar cascades data.
+\newblock \url{https://github.com/opencv/opencv/tree/2dd3d1371a9975248b1c236f4a94295a7ac5777d/data/haarcascades}, 2026.
+\newblock Accessed: 2026-03-16.
+
 \bibitem{patla2025drowsy}
 R.~Patla.
 \newblock Over 600 drowsy driving crashes were reported in 2025; the state patrol shares the warning signs.
 \newblock \url{https://www.kkco11news.com/2025/11/03/over-600-drowsy-driving-crashes-were-reported-2025-state-patrol-shares-warning-signs/}, November 3 2025.
 \newblock Accessed: 2026-03-04.
+
+\bibitem{raju_2020}
+S.~Raju.
+\newblock yawn\_eye\_dataset\_new.
+\newblock \url{https://www.kaggle.com/datasets/serenaraju/yawn-eye-dataset-new}, 2020.
+\newblock Accessed: March 12, 2026.
 
 \bibitem{Tefft2016}
 B.~C. Tefft.
